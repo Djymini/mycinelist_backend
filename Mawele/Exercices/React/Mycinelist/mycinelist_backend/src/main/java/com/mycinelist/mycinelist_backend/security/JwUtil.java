@@ -25,7 +25,7 @@ public class JwUtil {
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String email, int userId) {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
@@ -41,6 +41,7 @@ public class JwUtil {
                 .getBody()
                 .getSubject();
     }
+
 
     public boolean validateJwtToken(String token) {
         try {

@@ -8,24 +8,64 @@ public class User {
     private int id;
 
     @Email(message = "L'adresse mail rentrée n'est pas valide")
-    private String mail;
+    private String email;
 
-    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", message = "Le mot de passe doit contenir minimum 8 caractères, avoir une lettre majuscule, une lettre miniscule, un chiffre et un caractère spécial")
+    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[=#?!@$%^&*-]).{8,}$", message = "Mot de passe invalide")
     private String password;
+
+    @Size(min=2, max=20, message = "Le nom est n'a pas la bonne taille il doit faire entre 2 et 20 caractères")
+    private String username;
 
     private String role;
 
-    public User(int id, String mail, String password, String role) {
+    public User() {
+    }
+
+    public User(int id, String email, String password, String username, String role) {
         this.id = id;
-        this.mail = mail;
+        this.email = email;
         this.password = password;
+        this.username = username;
         this.role = role;
     }
 
-    public User(String mail, String password, String role) {
-        this.mail = mail;
+    public User(String email, String password, String username, String role) {
+        this.email = email;
         this.password = password;
+        this.username = username;
         this.role = role;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getRole() {
@@ -34,29 +74,5 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

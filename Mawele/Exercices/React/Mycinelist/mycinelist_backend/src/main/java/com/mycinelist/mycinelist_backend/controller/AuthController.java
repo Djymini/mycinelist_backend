@@ -32,12 +32,11 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody User user) {
-        System.out.println("coucou");
-        User userFound = userDao.findByMail(user.getMail());
-        if (userFound != null) {
+        boolean userFound = userDao.existsByEmail(user.getEmail());
+        if (userFound) {
             return ResponseEntity.badRequest().body("Error: Email is already in use!");
         }
-        User newUser = new User(user.getMail(), encoder.encode(user.getPassword()), "USER");
+        User newUser = new User(user.getEmail(), encoder.encode(user.getPassword()), user.getUsername(), "USER");
         boolean isUSerSaved = userDao.save(newUser);
         return isUSerSaved ? ResponseEntity.ok("User registered successfully!") : ResponseEntity.badRequest().body("Error: User registration failed!");
     }
@@ -46,11 +45,13 @@ public class AuthController {
     public String authenticateUser(@RequestBody User user) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        user.getMail(),
+                        user.getEmail(),
                         user.getPassword()
                 )
         );
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtUtils.generateToken(userDetails.getUsername());
+        int userId = userDao.findIdByEmail(user.getEmail());
+
+        return jwtUtils.generateToken(userDetails.getUsername(), userId);
     }
 }
